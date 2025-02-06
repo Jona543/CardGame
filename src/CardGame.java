@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 public class CardGame {
 
@@ -19,23 +20,51 @@ public class CardGame {
     }
 
     public void getDeck() {
-        deckOfCards.forEach(card -> card.describeCard(card.symbol, card.suit));
+        System.out.println(deckOfCards);
     }
 
     public void dealCard() {
-        int index = (int)(Math.random() * deckOfCards.size());
-        System.out.println("Random Card Is : " + deckOfCards.get(index));
+        System.out.println("Top Card Is : " + deckOfCards.get(0));
     }
 
     public void sortDeckInNumberOrder() {
-        Collections.sort(deckOfCards);
+        deckOfCards.sort(Comparator.comparingInt(Card::getValue));
     }
 
     public void sortDeckIntoSuits() {
+        ArrayList<Card> sortedIntoHearts = new ArrayList<>();
+        ArrayList<Card> sortedIntoDiamonds = new ArrayList<>();
+        ArrayList<Card> sortedIntoClubs = new ArrayList<>();
+        ArrayList<Card> sortedIntoSpades = new ArrayList<>();
 
+        deckOfCards.forEach(card -> {
+            if (card.getSuit() == '\u2660'){
+            sortedIntoSpades.add(card);
+        } else if (card.getSuit() == '\u2665'){
+            sortedIntoHearts.add(card);
+        } else if (card.getSuit() == '\u2666'){
+            sortedIntoDiamonds.add(card);
+        } else if (card.getSuit() == '\u2663'){
+            sortedIntoClubs.add(card);
+        }
+        });
+
+        sortedIntoClubs.sort(Comparator.comparingInt(Card::getValue));
+        sortedIntoSpades.sort(Comparator.comparingInt(Card::getValue));
+        sortedIntoHearts.sort(Comparator.comparingInt(Card::getValue));
+        sortedIntoDiamonds.sort(Comparator.comparingInt(Card::getValue));
+
+        ArrayList sortedIntoDecks = new ArrayList();
+
+        sortedIntoDecks.addAll(sortedIntoHearts);
+        sortedIntoDecks.addAll(sortedIntoDiamonds);
+        sortedIntoDecks.addAll(sortedIntoClubs);
+        sortedIntoDecks.addAll(sortedIntoSpades);
+
+        deckOfCards = sortedIntoDecks;
     }
 
     public void shuffleDeck() {
-
+        Collections.shuffle(deckOfCards);
     }
 }
