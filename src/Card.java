@@ -1,8 +1,8 @@
 public class Card {
     // unicode chars - spade: 2660, heart: 2665, clubs: 2663, diamond: 2666
-    private char suit;
-    private String symbol;
-    private int value;
+    private final char suit;
+    private final String symbol;
+    private final int value;
 
     public Card(char suit, String symbol, int value) {
         this.suit = suit;

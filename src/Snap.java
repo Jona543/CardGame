@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Snap extends CardGame {
 
@@ -34,25 +36,35 @@ public class Snap extends CardGame {
             System.out.println(playerTwo.getName() + ", your first card is " + deck[1]);
             if (deck[0].getSymbol().equals(deck[1].getSymbol())) {
                 System.out.println(playerTwo.getName() + ", your card is the " + deck[1] + " Type snap to win!");
-                String snap = scanner.nextLine();
 //                scanner.wait(2000); how to allow the user 2 seconds to type in snap before the else statement occurs and the other player wins
+                Timer timer = new Timer();
+                TimerTask timerTask = new TimerTask() {
+                    @Override
+                    public void run() {
+//                        String snap = "";
+                String snap = scanner.nextLine();
                 if (snap.equals("snap")){
                     System.out.println(playerTwo.getName() + " wins! Game Over");
-                    scanner.nextLine();
-                    scanner.close();
-                    // error after game finishes 'exception in thread "main"'
-                } else {
+                    System.exit(0);
+                    timer.cancel();
+                } else if (snap.isEmpty()){
                     System.out.println("Too slow, " + playerOne.getName() + " wins!");
-                    scanner.close();
+//                    System.exit(0);
+//                    timer.cancel();
+                    timer.purge();
+                    timer.cancel();
+                } else {
+                    System.out.println("Too slow! " + playerOne.getName() + " wins! Game Over");
+                    timer.cancel();
                 }
+//                System.exit(0);
+                    }
+                };
+                timer.schedule(timerTask, 2000);
             }
             scanner.nextLine();
 
             for (int i = 2; i < deck.length; i++) {
-                boolean winner = false;
-                if (winner) {
-                    scanner.close();
-                }
                 if (i % 2 == 0) {
                     if (deck[i - 1].getSymbol().equals(deck[i].getSymbol())) {System.out.println(playerOne.getName() + ", your card is the " + deck[i] + " Type snap to win!");
                         String snap = scanner.nextLine();
@@ -62,8 +74,6 @@ public class Snap extends CardGame {
                         } else {
                             System.out.println("Too slow, " + playerTwo.getName() + " wins!");
                         }
-
-                        winner = true;
                         break;
                     } else {
                         System.out.println(playerOne.getName() + ", your next card is " + deck[i]);
@@ -79,15 +89,14 @@ public class Snap extends CardGame {
                         } else {
                             System.out.println("Too slow, " + playerOne.getName() + " wins!");
                         }
-                        winner = true;
                         break;
                     } else {
                         System.out.println(playerTwo.getName() + ", your next card is " + deck[i]);
                         scanner.nextLine();
                     }
-
                 }
             }
+            scanner.close();
         } else if (players == 1) {
 
             scanner.nextLine();
@@ -111,7 +120,6 @@ public class Snap extends CardGame {
                 }
             }
         }
-
         // is there a way to make the thread go back to the top of the game if it gets through the whole deck and no pairs have occurred? I.e. shuffle the deck again then go through the whole process again
     }
 }
