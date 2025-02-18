@@ -26,10 +26,4 @@ public class Card {
     public String toString() {
         return (this.symbol + " of " + this.suit);
     }
-
-
-
-
-
-
 }

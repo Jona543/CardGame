@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 public class CardGame {
 
-    char[] suit = {'\u2660', '\u2665', '\u2666', '\u2663'};
+    char[] suit = {'♠', '♥', '♦', '♣'};
     String[] symbol = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"};
     int[] value = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
     String gameName = "Card Game";
@@ -40,13 +40,13 @@ public class CardGame {
         ArrayList<Card> sortedIntoSpades = new ArrayList<>();
 
         deckOfCards.forEach(card -> {
-            if (card.getSuit() == '\u2660'){
+            if (card.getSuit() == '♠'){
             sortedIntoSpades.add(card);
-        } else if (card.getSuit() == '\u2665'){
+        } else if (card.getSuit() == '♥'){
             sortedIntoHearts.add(card);
-        } else if (card.getSuit() == '\u2666'){
+        } else if (card.getSuit() == '♦'){
             sortedIntoDiamonds.add(card);
-        } else if (card.getSuit() == '\u2663'){
+        } else if (card.getSuit() == '♣'){
             sortedIntoClubs.add(card);
         }
         });
