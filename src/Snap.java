@@ -1,42 +1,30 @@
 import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Snap extends CardGame {
 
     Card[] deck = new Card[52];
     Scanner scanner = new Scanner(System.in);
-    Scanner scanner1 = new Scanner(System.in);
-    int players = 0;
-    String playerOneName = null;
-    String playerTwoName = null;
-    Player playerOne = null;
-    Player playerTwo = null;
-    String snap = null;
-    WinTimer winTimer = new WinTimer();
-    Thread myThread = new Thread(winTimer);
+    int players;
+    String playerOneName;
+    String playerTwoName;
+    Player playerOne;
+    Player playerTwo;
+    String snap;
 
     public Snap() {
-
         selectNumberOfPlayers();
         players = scanner.nextInt();
-
         if (players == 2) {
             selectPlayerNames();
             makeDeck();
             drawFirstCard();
-
             scanner.nextLine();
             drawTwoPlayerCards();
-
         } else if (players == 1) {
-
             scanner.nextLine();
             makeDeck();
             drawOnePlayerCard();
-
         }
-        // is there a way to make the thread go back to the top of the game if it gets through the whole deck and no pairs have occurred? I.e. shuffle the deck again then go through the whole process again
     }
 
     public void selectNumberOfPlayers() {
@@ -45,10 +33,10 @@ public class Snap extends CardGame {
         scanner.nextLine();
         String newLine = System.lineSeparator();
         System.out.println("If you would like to play with 2 players," + newLine + "please type 2 then press enter to begin," + newLine + "otherwise type 1 then press enter");
-
     }
 
     public void selectPlayerNames() {
+
         System.out.print("Welcome to two player snap! Player one please enter your name: ");
         playerOneName = scanner.next();
         System.out.print("Player two please enter your name: ");
@@ -69,32 +57,73 @@ public class Snap extends CardGame {
     }
 
     public void drawFirstCard() {
+        class CustomThread extends Thread {
+            final String playerOneName;
+            final String playerTwoName;
+            public CustomThread(String playerOneName, String playerTwoName) {
+                this.playerOneName = playerOneName;
+                this.playerTwoName = playerTwoName;
+            }
+            public void run() {
+                try {
+                    Thread.sleep(2000);
+                    System.out.println("Too slow, " + playerOneName + " wins");
+                    System.exit(0);
+                } catch (InterruptedException e) {
+                    System.exit(0);
+                }
+            }
+        }
         System.out.println(playerOne.getName() + ", your first card is " + deck[0]);
         scanner.nextLine();
         System.out.println(playerTwo.getName() + ", your first card is " + deck[1]);
-        if (deck[0].getSymbol().equals(deck[0].getSymbol())) {
-
-                    myThread.start();
-
-                    if (snap.equals("snap")){
-                        System.out.println(playerTwo.getName() + " wins! Game Over");
-                        System.exit(0);
-                        scanner.close();
-                    }
-//                System.exit(0);
-
-
+        if (deck[0].getSymbol().equals(deck[1].getSymbol())) {
+            System.out.println("type snap to win");
+            CustomThread customThread = new CustomThread(playerOneName, playerTwoName);
+            customThread.start();
+            snap = scanner.nextLine();
+            if (snap.equalsIgnoreCase("SNAP")){
+                customThread.interrupt();
+                System.out.println(playerTwoName + " wins! Game Over");
+                System.exit(0);
+                scanner.close();
+            } else {
+                customThread.interrupt();
+                System.out.println("Too slow! " + playerOne.getName() + " wins! Game Over");
+                System.exit(0);
+            }
         }
     }
 
     public void drawTwoPlayerCards() {
+        class CustomThread extends Thread {
+            final String playerOneName;
+            final String playerTwoName;
+            public CustomThread(String playerOneName, String playerTwoName) {
+                this.playerOneName = playerOneName;
+                this.playerTwoName = playerTwoName;
+            }
+            public void run() {
+                try {
+                    Thread.sleep(2000);
+                    System.out.println("Too slow, " + playerOneName + " wins");
+                    System.exit(0);
+                } catch (InterruptedException e) {
+                    System.exit(0);
+                }
+            }
+        }
         for (int i = 2; i < deck.length; i++) {
             if (i % 2 == 0) {
-                if (deck[i - 1].getSymbol().equals(deck[i].getSymbol())) {System.out.println(playerOne.getName() + ", your card is the " + deck[i] + " Type snap to win!");
+                if (deck[i - 1].getSymbol().equals(deck[i].getSymbol())) {System.out.println(playerOneName + ", your card is the " + deck[i] + " Type snap to win!");
+                    CustomThread customThread = new CustomThread(playerOneName, playerTwoName);
+                    customThread.start();
                     snap = scanner.nextLine();
-                    if (snap.equals("snap")){
+                    if (snap.equalsIgnoreCase("SNAP")){
+                        customThread.interrupt();
                         System.out.println(playerOne.getName() + " wins! Game Over");
                     } else {
+                        customThread.interrupt();
                         System.out.println("Too slow, " + playerTwo.getName() + " wins!");
                     }
                     break;
@@ -104,12 +133,16 @@ public class Snap extends CardGame {
                 }
             } else {
                 if (deck[i - 1].getSymbol().equals(deck[i].getSymbol())) {
-                    System.out.println(playerTwo.getName() + ", your card is the " + deck[i] + " Type snap to win!");
+                    System.out.println(playerTwoName + ", your card is the " + deck[i] + " Type snap to win!");
+                    CustomThread customThread = new CustomThread(playerOneName, playerTwoName);
+                    customThread.start();
                     snap = scanner.nextLine();
-                    if (snap.equals("snap")){
-                        System.out.println(playerTwo.getName() + " wins! Game Over");
+                    if (snap.equalsIgnoreCase("SNAP")){
+                        customThread.interrupt();
+                        System.out.println(playerTwoName + " wins! Game Over");
                     } else {
-                        System.out.println("Too slow, " + playerOne.getName() + " wins!");
+                        customThread.interrupt();
+                        System.out.println("Too slow, " + playerOneName + " wins!");
                     }
                     break;
                 } else {

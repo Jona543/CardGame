@@ -13,10 +13,10 @@ public class CardGame {
 
     public CardGame() {
 
-        for (int i = 0; i < suit.length; i++){
-            for (int j = 0; j < symbol.length; j++){
-            Card card = new Card(suit[i], symbol[j], value[j]);
-            deckOfCards.add(card);
+        for (char c : suit) {
+            for (int j = 0; j < symbol.length; j++) {
+                Card card = new Card(c, symbol[j], value[j]);
+                deckOfCards.add(card);
             }
         }
     }
