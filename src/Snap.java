@@ -16,14 +16,32 @@ public class Snap extends CardGame {
         players = scanner.nextInt();
         if (players == 2) {
             selectPlayerNames();
+        while(true){
             makeDeck();
             drawFirstCard();
             scanner.nextLine();
             drawTwoPlayerCards();
+            System.out.println("You have gone through the full deck, would you like to shuffle and play again? (Y/N)");
+            String playAgain = scanner.nextLine();
+
+            if (!playAgain.equalsIgnoreCase("Y")){
+                System.out.println("Game Over");
+                break;
+            }
+        }
         } else if (players == 1) {
             scanner.nextLine();
-            makeDeck();
-            drawOnePlayerCard();
+            while(true) {
+                makeDeck();
+                drawOnePlayerCard();
+                System.out.println("You have gone through the full deck, would you like to shuffle and play again? (Y/N)");
+                String playAgain = scanner.nextLine();
+
+                if (!playAgain.equalsIgnoreCase("Y")){
+                    System.out.println("Game Over");
+                    break;
+                }
+            }
         }
     }
 
@@ -151,7 +169,6 @@ public class Snap extends CardGame {
                 }
             }
         }
-        scanner.close();
     }
 
     public void drawOnePlayerCard() {
@@ -162,8 +179,7 @@ public class Snap extends CardGame {
         for (int i = 1; i < deck.length; i++) {
             if (deck[i - 1].getSymbol().equals(deck[i].getSymbol())) {
                 System.out.println("Snap! Your card is the " + deck[i] + " Game Over");
-                scanner.close();
-                break;
+                System.exit(0);
             } else {
                 System.out.println("Your next card is the " + deck[i]);
                 scanner.nextLine();
